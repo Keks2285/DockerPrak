@@ -1,0 +1,32 @@
+version: "1"
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: taskDB
+    ports:
+      - 6101:6101
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  taskapi:
+    build: ./taskapi
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: 1
+      DB_HOST: postgres
+      DB_PORT: 6101
+      DB_NAME: taskDB
+      PORT: 6100
+    ports:
+      - 6100:6100      
+    depends_on:
+      - postgres
+
+  adminer:
+    image: adminer
+    ports:
+      - 8888:8080
+volumes:
+  postgres_data:
